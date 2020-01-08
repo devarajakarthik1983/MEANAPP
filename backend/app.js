@@ -6,12 +6,11 @@ const Post = require('./model/post');
 
 const app = express();
 
-mongoose.connect("mongodb+srv://karthik:@cluster0-ur5hs.mongodb.net/node-angular?retryWrites=true&w=majority",
-{useNewUrlParser: true })
+mongoose.connect("mongodb+srv://karthik:@cluster0-ur5hs.mongodb.net/node-angular?retryWrites=true&w=majority")
 .then(()=>{
   console.log('Connected to database');
-} , ()=>{
-  console.log('Not Connected');
+} , (err)=>{
+  console.log('Not Connected' ,err);
 })
 
 app.use(bodyParser.json());
@@ -35,11 +34,15 @@ app.post("/api/posts", (req, res, next) => {
       title:req.body.title , 
       content: req.body.content
     });
-    post.save();
+    post.save()
+    .then(createdPost=>{
+      res.status(201).json({
+        message: 'Post added successfully',
+        postId: createdPost._id
+      });
+    });
   
-  res.status(201).json({
-    message: 'Post added successfully'
-  });
+  
 });
 
 app.get("/api/posts", (req, res, next) => {
@@ -51,6 +54,16 @@ app.get("/api/posts", (req, res, next) => {
     });
   })
   
+});
+
+app.delete('/api/posts/:id' , (req,res)=>{
+  Post.deleteOne({_id: req.params.id})
+  .then((data)=>{
+    console.log(data);
+    res.status(200).json({message: 'Post deleted successfully'});
+  }).catch(err=>{
+    console.log(err);
+  });
 });
 
 module.exports = app;
