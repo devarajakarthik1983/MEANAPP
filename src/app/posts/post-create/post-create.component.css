@@ -4,14 +4,14 @@ textarea {
 }
 
 mat-spinner {
-margin: auto;
+  margin: auto;
 }
 
-input[type="file"]{
+input[type="file"] {
   visibility: hidden;
 }
 
-.image-preview{
+.image-preview {
   height: 5rem;
   margin: 1rem 0;
 }
@@ -19,3 +19,5 @@ input[type="file"]{
 .image-preview img {
   height: 100%;
 }
+
+
